@@ -1,0 +1,22 @@
+# --- Data: never commit raw data to git (huge + we'll use DVC later) ---
+data/
+*.csv
+
+# --- Python virtual environment (uv creates .venv) ---
+.venv/
+__pycache__/
+*.py[cod]
+
+# --- Tooling caches ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Secrets & local config (Kaggle keys, cloud creds, etc.) ---
+.env
+kaggle.json
+
+# --- OS / editor noise ---
+.DS_Store
+.vscode/
+.idea/

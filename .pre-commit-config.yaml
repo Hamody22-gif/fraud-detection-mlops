@@ -1,0 +1,31 @@
+# Runs automatically on every `git commit`. A failing hook blocks the commit.
+repos:
+  # --- Basic file hygiene (maintained by the pre-commit team) ---
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace        # strip trailing spaces
+      - id: end-of-file-fixer          # ensure files end with a newline
+      - id: check-yaml                 # validate YAML syntax
+      - id: check-toml                 # validate TOML (your pyproject.toml)
+      - id: check-added-large-files    # block accidental big-file commits
+        args: ["--maxkb=5000"]         # reject anything over ~5 MB
+
+  # --- Our tools, run from the project venv so versions match pyproject.toml ---
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff (lint)
+        entry: uv run ruff check --fix
+        language: system
+        types: [python]
+      - id: ruff-format
+        name: ruff (format)
+        entry: uv run ruff format
+        language: system
+        types: [python]
+      - id: mypy
+        name: mypy (type check)
+        entry: uv run mypy
+        language: system
+        types: [python]
