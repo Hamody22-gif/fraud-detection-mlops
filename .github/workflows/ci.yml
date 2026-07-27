@@ -1,0 +1,30 @@
+name: CI
+
+# Run on every push to main and on every pull request
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest      # a fresh Linux machine, provided by GitHub
+    steps:
+      - uses: actions/checkout@v4          # 1. get your code onto the machine
+
+      - name: Install uv                    # 2. install uv (same tool as local)
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies          # 3. build the env from your lockfile
+        run: uv sync
+
+      - name: Lint (ruff)                    # 4-7. the same checks you run locally
+        run: uv run ruff check .
+      - name: Format check (ruff)
+        run: uv run ruff format --check .
+      - name: Type check (mypy)
+        run: uv run mypy src
+      - name: Tests (pytest)
+        run: uv run pytest
