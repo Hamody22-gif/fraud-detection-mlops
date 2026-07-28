@@ -27,6 +27,8 @@ dev = [
 # Max line length before ruff complains
 line-length = 100
 target-version = "py312"
+extend-exclude = ["notebooks"]
+
 
 [tool.ruff.lint]
 # Which rule families to enforce. Each letter is a category:
@@ -34,6 +36,8 @@ target-version = "py312"
 #   I  = import sorting      N  = naming conventions
 #   UP = modernize old syntax  B = likely-bug patterns  SIM = simplifiable code
 select = ["E", "F", "I", "N", "UP", "B", "SIM"]
+ignore = ["N803", "N806"]  # allow ML convention: capital X for feature matrices/args
+
 
 [tool.mypy]
 python_version = "3.12"

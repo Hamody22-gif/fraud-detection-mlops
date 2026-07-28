@@ -16,3 +16,7 @@ NIGHT_HOURS = [22, 23, 0, 1, 2, 3]
 
 # The column we're predicting
 TARGET = "is_fraud"
+# Modeling features, grouped by how they'll be preprocessed (from EDA)
+NUMERIC_FEATURES = ["amt", "age", "hour", "day_of_week"]  # will be scaled
+CATEGORICAL_FEATURES = ["category", "gender"]  # will be one-hot encoded
+PASSTHROUGH_FEATURES = ["is_night"]  # already 0/1, leave as-is
