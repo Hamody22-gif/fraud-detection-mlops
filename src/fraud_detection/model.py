@@ -14,10 +14,13 @@ def build_xgboost_model() -> Pipeline:
             (
                 "clf",
                 XGBClassifier(
-                    n_estimators=300,
-                    max_depth=6,
-                    learning_rate=0.1,
-                    scale_pos_weight=171,  # handle imbalance (~neg/pos ratio)
+                    n_estimators=500,
+                    max_depth=10,
+                    learning_rate=0.03,
+                    subsample=0.7,
+                    colsample_bytree=0.7,
+                    min_child_weight=1,
+                    scale_pos_weight=171,
                     eval_metric="aucpr",
                     n_jobs=-1,
                     random_state=42,

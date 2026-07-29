@@ -19,7 +19,7 @@ def main() -> None:
     mlflow.set_tracking_uri("sqlite:///mlflow.db")
     mlflow.set_experiment("fraud-detection")
 
-    with mlflow.start_run(run_name="xgboost-baseline"):
+    with mlflow.start_run(run_name="xgboost-tuned"):
         model = build_xgboost_model()
 
         # Log the hyperparameters we're using

@@ -38,5 +38,17 @@ def make_xy(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
     """Engineer features, then split into X (features) and y (target)."""
     df = add_time_features(df)
     df = add_age(df)
+    df = add_velocity_features(df)  # ← new
+
     feature_cols = NUMERIC_FEATURES + CATEGORICAL_FEATURES + PASSTHROUGH_FEATURES
     return df[feature_cols], df[TARGET]
+
+
+def add_velocity_features(df: pd.DataFrame) -> pd.DataFrame:
+    """Add per-card velocity signals (uses only PAST transactions — leakage-safe)."""
+    df = df.copy()
+    df["trans_date_trans_time"] = pd.to_datetime(df["trans_date_trans_time"])
+    df = df.sort_values(["cc_num", "trans_date_trans_time"])
+    # Seconds since this card's previous transaction (NaN for the first one)
+    df["time_since_last"] = df.groupby("cc_num")["trans_date_trans_time"].diff().dt.total_seconds()
+    return df

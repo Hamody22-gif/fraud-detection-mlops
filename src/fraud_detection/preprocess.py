@@ -1,6 +1,8 @@
 """Preprocessing: scale numeric features, one-hot encode categorical ones."""
 
 from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from fraud_detection.config import (
@@ -11,15 +13,16 @@ from fraud_detection.config import (
 
 
 def build_preprocessor() -> ColumnTransformer:
-    """Build the preprocessing transformer.
-
-    - numeric features  -> StandardScaler (level the ranges)
-    - categorical       -> OneHotEncoder  (text -> 0/1 columns)
-    - passthrough       -> kept as-is
-    """
+    """Scale numerics (with imputation), one-hot encode categoricals."""
+    numeric = Pipeline(
+        [
+            ("impute", SimpleImputer(strategy="median")),  # fill NaN (e.g. first txn)
+            ("scale", StandardScaler()),
+        ]
+    )
     return ColumnTransformer(
         transformers=[
-            ("num", StandardScaler(), NUMERIC_FEATURES),
+            ("num", numeric, NUMERIC_FEATURES),
             ("cat", OneHotEncoder(handle_unknown="ignore"), CATEGORICAL_FEATURES),
             ("pass", "passthrough", PASSTHROUGH_FEATURES),
         ],
