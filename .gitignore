@@ -20,3 +20,6 @@ kaggle.json
 .DS_Store
 .vscode/
 .idea/
+
+# Trained model artifacts
+models/

@@ -1,16 +1,27 @@
 """Model definitions."""
 
-from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
+from xgboost import XGBClassifier
 
 from fraud_detection.preprocess import build_preprocessor
 
 
-def build_logreg_model() -> Pipeline:
-    """Baseline model: preprocessing + Logistic Regression, as one Pipeline."""
+def build_xgboost_model() -> Pipeline:
+    """XGBoost model: preprocessing + gradient-boosted trees, as one Pipeline."""
     return Pipeline(
         [
             ("preprocess", build_preprocessor()),
-            ("clf", LogisticRegression(max_iter=1000, class_weight="balanced")),
+            (
+                "clf",
+                XGBClassifier(
+                    n_estimators=300,
+                    max_depth=6,
+                    learning_rate=0.1,
+                    scale_pos_weight=171,  # handle imbalance (~neg/pos ratio)
+                    eval_metric="aucpr",
+                    n_jobs=-1,
+                    random_state=42,
+                ),
+            ),
         ]
     )

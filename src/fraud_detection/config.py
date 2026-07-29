@@ -9,6 +9,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 RAW_DATA_DIR = PROJECT_ROOT / "data" / "raw"
 TRAIN_CSV = RAW_DATA_DIR / "fraudTrain.csv"
 TEST_CSV = RAW_DATA_DIR / "fraudTest.csv"
+MODELS_DIR = PROJECT_ROOT / "models"
+
 
 # Hours considered "night" — fraud rate was ~18-20x higher here (from EDA)
 NIGHT_HOURS = [22, 23, 0, 1, 2, 3]
@@ -20,3 +22,6 @@ TARGET = "is_fraud"
 NUMERIC_FEATURES = ["amt", "age", "hour", "day_of_week"]  # will be scaled
 CATEGORICAL_FEATURES = ["category", "gender"]  # will be one-hot encoded
 PASSTHROUGH_FEATURES = ["is_night"]  # already 0/1, leave as-is
+
+# Chosen decision threshold (tuned on the PR curve — balances recall vs. false alarms)
+DECISION_THRESHOLD = 0.95
