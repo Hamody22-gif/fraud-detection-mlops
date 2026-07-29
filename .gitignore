@@ -23,3 +23,8 @@ kaggle.json
 
 # Trained model artifacts
 models/
+
+# MLflow local backend + artifacts
+mlflow.db
+mlartifacts/
+mlruns/

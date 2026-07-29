@@ -8,8 +8,9 @@ description = "End-to-end MLOps fraud detection pipeline on the Sparkov dataset"
 requires-python = ">=3.12"
 # Runtime libraries go here — empty for now, we'll add pandas etc. in Phase 1
 dependencies = [
+    "mlflow>=2.16",
     "numpy>=2.5.1",
-    "pandas>=3.0.3",
+    "pandas<3",
     "scikit-learn>=1.9.0",
     "xgboost>=3.3.0",
 ]
