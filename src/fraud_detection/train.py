@@ -56,6 +56,16 @@ def main() -> None:
         mlflow.log_metric("pr_auc", pr_auc)
         mlflow.log_metric("precision", precision)
         mlflow.log_metric("recall", recall)
+        mlflow.sklearn.log_model(
+            model,
+            name="model",
+            registered_model_name="fraud-detection-model",
+            skops_trusted_types=[
+                "numpy.dtype",
+                "xgboost.core.Booster",
+                "xgboost.sklearn.XGBClassifier",
+            ],
+        )
 
         print(f"PR-AUC={pr_auc:.4f}  precision={precision:.4f}  recall={recall:.4f}")
         print(classification_report(y_test, y_pred, digits=4))
