@@ -1,0 +1,38 @@
+schema: '2.0'
+stages:
+  featurize:
+    cmd: python -m fraud_detection.featurize
+    deps:
+    - path: data/raw/fraudTest.csv
+      hash: md5
+      md5: 692357a2589a1a6fcd44f14b3e1f9d2c
+      size: 150354339
+    - path: data/raw/fraudTrain.csv
+      hash: md5
+      md5: 9723893e5492dc0551036edcf596e284
+      size: 351238196
+    - path: src/fraud_detection/config.py
+      hash: md5
+      md5: 1de7dd05068f3d572eb594b8133cddf4
+      size: 1081
+    - path: src/fraud_detection/data.py
+      hash: md5
+      md5: 81e9e4bd327a09f982cbfef2f96cb0c2
+      size: 367
+    - path: src/fraud_detection/features.py
+      hash: md5
+      md5: 6c775bf22d04abe76574bcddff3541be
+      size: 1902
+    - path: src/fraud_detection/featurize.py
+      hash: md5
+      md5: 10110d4b573212262f930f99c00f3f99
+      size: 1027
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: ecbd6a7d1aec8d72833f5b952b8b1ca7
+      size: 21995959
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 2c81f2196dc0cfe857401743f26c57fe
+      size: 51430278

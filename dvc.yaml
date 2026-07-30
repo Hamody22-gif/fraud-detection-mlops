@@ -1,0 +1,13 @@
+stages:
+  featurize:
+    cmd: python -m fraud_detection.featurize
+    deps:
+      - src/fraud_detection/featurize.py
+      - src/fraud_detection/features.py
+      - src/fraud_detection/data.py
+      - src/fraud_detection/config.py
+      - data/raw/fraudTrain.csv
+      - data/raw/fraudTest.csv
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
