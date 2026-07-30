@@ -1,6 +1,7 @@
-# --- Data: never commit raw data to git (huge + we'll use DVC later) ---
-data/
-*.csv
+# --- Data is versioned by DVC ---
+# DVC auto-adds precise ignores for the actual data files (in data/**/.gitignore),
+# while the small *.dvc pointer files ARE committed to git.
+
 
 # --- Python virtual environment (uv creates .venv) ---
 .venv/
