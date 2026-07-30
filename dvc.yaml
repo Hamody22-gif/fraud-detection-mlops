@@ -11,3 +11,18 @@ stages:
     outs:
       - data/processed/train.csv
       - data/processed/test.csv
+
+  train:
+    cmd: python -m fraud_detection.train
+    deps:
+      - src/fraud_detection/train.py
+      - src/fraud_detection/model.py
+      - src/fraud_detection/preprocess.py
+      - src/fraud_detection/config.py
+      - data/processed/train.csv
+      - data/processed/test.csv
+    outs:
+      - models/xgboost.joblib
+    metrics:
+      - metrics.json:
+          cache: false

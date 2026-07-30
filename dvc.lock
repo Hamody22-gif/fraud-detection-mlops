@@ -13,8 +13,8 @@ stages:
       size: 351238196
     - path: src/fraud_detection/config.py
       hash: md5
-      md5: 1de7dd05068f3d572eb594b8133cddf4
-      size: 1081
+      md5: a47423d42d08400d1ca64aec424bdeaf
+      size: 1125
     - path: src/fraud_detection/data.py
       hash: md5
       md5: 81e9e4bd327a09f982cbfef2f96cb0c2
@@ -36,3 +36,39 @@ stages:
       hash: md5
       md5: 2c81f2196dc0cfe857401743f26c57fe
       size: 51430278
+  train:
+    cmd: python -m fraud_detection.train
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: ecbd6a7d1aec8d72833f5b952b8b1ca7
+      size: 21995959
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 2c81f2196dc0cfe857401743f26c57fe
+      size: 51430278
+    - path: src/fraud_detection/config.py
+      hash: md5
+      md5: a47423d42d08400d1ca64aec424bdeaf
+      size: 1125
+    - path: src/fraud_detection/model.py
+      hash: md5
+      md5: 5b7fa2fecad11536b6ad1600a97be6c1
+      size: 889
+    - path: src/fraud_detection/preprocess.py
+      hash: md5
+      md5: 422e1b74bcb7a73f2db8c54cf95c1b78
+      size: 971
+    - path: src/fraud_detection/train.py
+      hash: md5
+      md5: f75091a05b68afd514dcd2a231f9a863
+      size: 2975
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: 2aa64aadfa1c0a4e3d7414ba696b1313
+      size: 104
+    - path: models/xgboost.joblib
+      hash: md5
+      md5: 3c1c3f45d5aac3edee958deffdfe1759
+      size: 8884680

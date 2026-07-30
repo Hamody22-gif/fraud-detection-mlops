@@ -1,7 +1,10 @@
-"""Train and evaluate the XGBoost model."""
+"""DVC stage 2 — train and evaluate the XGBoost model on the processed data."""
+
+import json
 
 import joblib
 import mlflow
+import pandas as pd
 from sklearn.metrics import (
     average_precision_score,
     classification_report,
@@ -9,9 +12,13 @@ from sklearn.metrics import (
     recall_score,
 )
 
-from fraud_detection.config import DECISION_THRESHOLD, MODELS_DIR, TEST_CSV, TRAIN_CSV
-from fraud_detection.data import load_raw_data
-from fraud_detection.features import make_xy
+from fraud_detection.config import (
+    DECISION_THRESHOLD,
+    METRICS_FILE,
+    MODELS_DIR,
+    PROCESSED_DATA_DIR,
+    TARGET,
+)
 from fraud_detection.model import build_xgboost_model
 
 
@@ -22,7 +29,6 @@ def main() -> None:
     with mlflow.start_run(run_name="xgboost-tuned"):
         model = build_xgboost_model()
 
-        # Log the hyperparameters we're using
         clf_params = model.named_steps["clf"].get_params()
         mlflow.log_params(
             {
@@ -34,28 +40,36 @@ def main() -> None:
             }
         )
 
-        # Train
-        X_train, y_train = make_xy(load_raw_data(TRAIN_CSV))
+        # --- Train on the processed TRAIN table (featurize produced this) ---
+        train_df = pd.read_csv(PROCESSED_DATA_DIR / "train.csv")
+        y_train = train_df[TARGET]
+        X_train = train_df.drop(columns=[TARGET])
         model.fit(X_train, y_train)
-        del X_train, y_train
+        del X_train, y_train, train_df  # free memory before loading test
 
-        # Save locally too (the notebook/API load this)
         MODELS_DIR.mkdir(exist_ok=True)
         joblib.dump(model, MODELS_DIR / "xgboost.joblib")
 
-        # Evaluate at our tuned threshold
-        X_test, y_test = make_xy(load_raw_data(TEST_CSV))
+        # --- Evaluate on the processed TEST table ---
+        test_df = pd.read_csv(PROCESSED_DATA_DIR / "test.csv")
+        y_test = test_df[TARGET]
+        X_test = test_df.drop(columns=[TARGET])
         y_proba = model.predict_proba(X_test)[:, 1]
         y_pred = (y_proba >= DECISION_THRESHOLD).astype(int)
 
-        pr_auc = average_precision_score(y_test, y_proba)
-        precision = precision_score(y_test, y_pred)
-        recall = recall_score(y_test, y_pred)
+        pr_auc = float(average_precision_score(y_test, y_proba))
+        precision = float(precision_score(y_test, y_pred))
+        recall = float(recall_score(y_test, y_pred))
 
-        # Log the metrics to MLflow
         mlflow.log_metric("pr_auc", pr_auc)
         mlflow.log_metric("precision", precision)
         mlflow.log_metric("recall", recall)
+
+        # --- Write metrics.json for DVC to track (enables `dvc metrics show`) ---
+        METRICS_FILE.write_text(
+            json.dumps({"pr_auc": pr_auc, "precision": precision, "recall": recall}, indent=2)
+        )
+
         mlflow.sklearn.log_model(
             model,
             name="model",

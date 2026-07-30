@@ -11,6 +11,7 @@ TRAIN_CSV = RAW_DATA_DIR / "fraudTrain.csv"
 TEST_CSV = RAW_DATA_DIR / "fraudTest.csv"
 MODELS_DIR = PROJECT_ROOT / "models"
 PROCESSED_DATA_DIR = PROJECT_ROOT / "data" / "processed"
+METRICS_FILE = PROJECT_ROOT / "metrics.json"
 
 
 # Hours considered "night" — fraud rate was ~18-20x higher here (from EDA)
