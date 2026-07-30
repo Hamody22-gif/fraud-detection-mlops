@@ -68,6 +68,7 @@ def main() -> None:
         # --- Write metrics.json for DVC to track (enables `dvc metrics show`) ---
         METRICS_FILE.write_text(
             json.dumps({"pr_auc": pr_auc, "precision": precision, "recall": recall}, indent=2)
+            + "\n"
         )
 
         mlflow.sklearn.log_model(
