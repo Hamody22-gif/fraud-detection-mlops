@@ -26,6 +26,10 @@ ENV PYTHONPATH="/app"
 # Document the port the app serves on
 EXPOSE 8000
 
+# Pull the trained model from the GitHub Release (it's DVC-tracked, not in git)
+ADD https://github.com/Hamody22-gif/fraud-detection-mlops/releases/download/v0.1.0/xgboost.joblib /app/models/xgboost.joblib
+
+
 # Start the server, bound to 0.0.0.0 so it's reachable from OUTSIDE the container
 # (localhost inside a container is unreachable from your host — this is the #1 Docker gotcha)
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}
