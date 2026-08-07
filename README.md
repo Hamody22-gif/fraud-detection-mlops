@@ -51,14 +51,15 @@ flowchart LR
     C --> E["model.joblib"]
     E -->|GitHub Release| F["Docker image<br/>FastAPI + model"]
     F -->|push to main| G["Render<br/>(live API)"]
-    H["Client"] -->|POST /predict| G
-    G -->|fraud probability| H
+    UI["Streamlit UI<br/>(user-facing)"] -->|POST /predict| G
+    G -->|fraud probability| UI
+
 ```
 
 ## 🧰 Tech stack
 **ML:** scikit-learn · XGBoost · pandas
 **MLOps:** MLflow (tracking + registry) · DVC (data + pipeline versioning)
-**Serving:** FastAPI · Uvicorn · Docker · Render
+**Serving:** FastAPI · Uvicorn · Docker · Render (API) · Streamlit (UI)
 **Quality:** uv · ruff · mypy · pytest · pre-commit · GitHub Actions CI
 
 ## 🗂️ Project structure
@@ -95,6 +96,8 @@ pointers and `dvc.lock` are committed, so any commit's exact data + model are re
 - [x] REST API serving (FastAPI)
 - [x] Containerization (Docker)
 - [x] Live cloud deployment (Render, auto-deploy on push)
+- [x] Interactive Streamlit UI (frontend calling the API)
+
 
 ## 📸 Screenshots
 _MLflow experiment runs · DVC DAG · Swagger `/docs` · a live prediction_
